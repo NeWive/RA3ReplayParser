@@ -1,10 +1,10 @@
-# RAT-RA3-Replay-Parser
+# RA3-Replay-Parser
 
 用于解析红色警戒三(Command & Conquer: Red Alert 3)的回放文件 `.RA3Replay`
 
 以JSON字符串形式输出，计划后续编译为Webassembly以备后续使用。
 
-后续会优化代码
+现在是屎山demo，后续会优化
 
 ## RA3 Replay文件格式
 
