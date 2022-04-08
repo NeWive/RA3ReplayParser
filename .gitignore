@@ -1,6 +1,5 @@
 cmake-build-debug/**/*
 *.RA3Replay
-*.html
-*.js
-*.wasm
 .idea/
+.cmake/
+CMakeFiles/

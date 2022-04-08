@@ -12,7 +12,9 @@
 #include<fstream>
 #include<cstring>
 #include<vector>
+#include<ostream>
 #include<jsoncons/json.hpp>
+#include<sstream>
 
 #define MAGIC_SIZE 17
 #define U1_SIZE 31
@@ -40,6 +42,13 @@ typedef struct TBString {
     unsigned char byte2;
 } TBString;
 
+typedef struct dateText
+{
+    uint16_t data[8];
+} dateText;
+
+
+
 unsigned int readUInt32LittleEndian(const unsigned char in[]);
 
 unsigned int readUInt16LittleEndian(const unsigned char in[]);
@@ -48,10 +57,12 @@ void unicodePointToUTF8(unsigned int, CodePoint *);
 
 std::string read2ByteString(std::istream &in, unsigned int separator);
 
+std::string read2ByteStringN(std::istream &in, unsigned int separator, size_t n);
+
 std::vector<std::string> tokenize(const std::string &, const std::string &separator);
 
 std::string getFaction(unsigned int f);
 
-bool parseReplayFile(char *, std::string &);
+bool parseReplayFile(char f[], std::string &);
 
 #endif //RAT_REPLAY_PARSER_RA3REPLAY_H

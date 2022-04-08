@@ -5,6 +5,7 @@
 
 #include "RA3Replay.h"
 
+
 unsigned int readUInt32LittleEndian(const unsigned char in[]) {
     return ((unsigned int) ((in)[0] | ((in)[1] << 8) | ((in)[2] << 16) | ((in)[3] << 24)));
 }
@@ -18,6 +19,24 @@ std::string read2ByteString(std::istream &in, unsigned int separator) {
     TBString cbuf;
     std::string s;
     while (true) {
+        in.read(reinterpret_cast<char *>(&cbuf), sizeof(TBString));
+        unsigned int t = readUInt16LittleEndian(cbuf.byte1, cbuf.byte2);
+        if (cbuf.byte1 == separator && cbuf.byte2 == separator) {
+            break;
+        }
+        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+        s += converter.to_bytes(t);
+    }
+    return s;
+}
+
+std::string read2ByteStringN(std::istream &in, unsigned int separator, size_t len) {
+    CodePoint ccp;
+    TBString cbuf;
+    std::string s;
+    size_t n = len;
+    std::cout << "filename length: " << len << std::endl;
+    while(n--) {
         in.read(reinterpret_cast<char *>(&cbuf), sizeof(TBString));
         unsigned int t = readUInt16LittleEndian(cbuf.byte1, cbuf.byte2);
         if (cbuf.byte1 == separator && cbuf.byte2 == separator) {
@@ -60,9 +79,9 @@ std::string getFaction(unsigned int f) {
     }
 }
 
-bool parseReplayFile(char *fileName, std::string &target) {
+bool parseReplayFile(char fileName[], std::string &target) {
     auto *headerTemp = (ReplayHeaderTemp *)malloc(sizeof (ReplayHeaderTemp));
-    std::string replayTitle, matchDesc, mapName, mapId, replayName, versionMagic, str_anothername;
+    std::string replayTitle, matchDesc, mapName, mapId, replayName, str_anothername;
     size_t size;
     uint32_t timeStamp;
     char cncMagic[8];
@@ -93,12 +112,9 @@ bool parseReplayFile(char *fileName, std::string &target) {
     char teamId;
     uint32_t playerId;
 
-    std::cout << "Opening file: " << fileName << std::endl;
+//    std::stringstream replayFile(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+//    replayFile << data;
     std::fstream replayFile(fileName, std::ios::in | std::ios::binary);
-    if (!replayFile) {
-        std::cerr << "Open replay file failed" << std::endl;
-        return false;
-    }
     // 输出文件大小
     replayFile.seekg(0, std::ios::end);
     size = replayFile.tellg();
@@ -254,15 +270,43 @@ bool parseReplayFile(char *fileName, std::string &target) {
             matchSeed = token;
         } else if(token[0] == 'R' && token[1] == 'U') {
             matchConf = token;
-        } else {
-
-        }
+        } else {}
     }
     std::cout << mapRealName << std::endl;
     std::cout << mapCRC << std::endl;
     std::cout << matchSeed << std::endl;
     std::cout << matchConf << std::endl;
     std::cout << playerInfoQuery << std::endl;
+
+    // 跳过Header结尾无用内容
+    char u1[9];
+    uint32_t strFileNameLen;
+    std::string strFileName;
+    dateText dateTime;
+    uint32_t versionMagicLen;
+    uint32_t u20[20];
+    uint32_t after_vermagic;
+    char tempByte;
+
+    replayFile.read(u1, 9); // 无用
+
+    replayFile.read(reinterpret_cast<char *>(&strFileNameLen), 4);
+    strFileName = read2ByteStringN(replayFile, headerTemp->separator[0], strFileNameLen);
+    std::cout << strFileName << std::endl;
+
+    replayFile.read(reinterpret_cast<char *>(&dateTime), sizeof(dateTime));
+
+    replayFile.read(reinterpret_cast<char *>(&versionMagicLen), 4);
+    std::vector<char> versionMagic(versionMagicLen);
+    replayFile.read(versionMagic.data(), versionMagicLen);
+    std::string str_vermagic = std::string(versionMagic.begin(), versionMagic.end());
+    replayFile.read(reinterpret_cast<char*>(&after_vermagic), 4);
+
+    replayFile.read(&tempByte, 1);
+    replayFile.read(reinterpret_cast<char*>(&u20), 20*4);
+    std::cout << "Version/build magic string: \"" << str_vermagic << "\", followed by 0x"
+              << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << after_vermagic << " and 0x"
+              << std::setw(2) << (unsigned int)(tempByte) << std::endl;
 
     jsoncons::json out;
     out.insert_or_assign("replayTitle", replayTitle);
@@ -287,8 +331,8 @@ bool parseReplayFile(char *fileName, std::string &target) {
     out.insert_or_assign("mapCRC", mapCRC);
     out.insert_or_assign("matchSeed", matchSeed);
     out.insert_or_assign("matchConf", matchConf);
+    // 头文件读取完毕
 
     target = out.to_string();
-    replayFile.close();
     return true;
 }
