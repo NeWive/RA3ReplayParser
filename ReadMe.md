@@ -339,31 +339,31 @@ ENDIF
 | :--------- | :----------- | :----------------------------------------------------------- |
 | 0x00       | 45           | Harder secundary ability, like the bunker of Soviet Combat Engineer?? |
 | 0x01       | special      | For example at the end of every replay; shows the creator of the replay; also observed in other places. |
-| 0x02       | special      | Set rally point.                                             |
-| 0x03       | 17           | Start/resume research upgrade.                               |
-| 0x04       | 17           | Pause/cancel research upgrade.                               |
-| 0x05       | 20           | Start/resume unit production.                                |
-| 0x06       | 20           | Pause/cancel unit production.                                |
-| 0x07       | 17           | Start/resume building construction. (Allies and Soviets only, Empire Cores are treated as units.) |
-| 0x08       | 17           | Pause/cancel building construction.                          |
+| 0x02       | special      | Set rally point.(设置集结点)                                 |
+| 0x03       | 17           | Start/resume research upgrade.(开始/继续研究升级)            |
+| 0x04       | 17           | Pause/cancel research upgrade.(暂停/取消研究升级)            |
+| 0x05       | 20           | Start/resume unit production.(开始/继续单位生产)             |
+| 0x06       | 20           | Pause/cancel unit production.(暂停/取消单位生产)             |
+| 0x07       | 17           | Start/resume building construction. (Allies and Soviets only, Empire Cores are treated as units.)(开始/继续建筑建造，帝国核心被当作单位处理) |
+| 0x08       | 17           | Pause/cancel building construction.(取消/暂停建筑建造)       |
 | 0x09       | 35           | Place building on map (Allies and Soviets only).             |
-| 0x0A       | std: 2       | Sell building.                                               |
-| 0x0C       | special      | Possibly ungarrison?                                         |
-| 0x0D       | std: 2       | Attack.                                                      |
-| 0x0E       | std: 2       | Force-fire.                                                  |
+| 0x0A       | std: 2       | Sell building.(售卖建筑)                                     |
+| 0x0C       | special      | Possibly ungarrison?(可能是取消占据房屋)                     |
+| 0x0D       | std: 2       | Attack.(攻击)                                                |
+| 0x0E       | std: 2       | Force-fire.(强制攻击)                                        |
 | 0x0F       | 16           |                                                              |
-| 0x10       | special      | Garrison a building.                                         |
+| 0x10       | special      | Garrison a building.(占据房屋)                               |
 | 0x12       | std: 2       |                                                              |
-| 0x14       | 16           | Move units.                                                  |
-| 0x15       | 16           | Attack-move units.                                           |
-| 0x16       | 16           | Force-move units.                                            |
-| 0x1A       | std: 2       | Stop command.                                                |
+| 0x14       | 16           | Move units.(移动单位)                                        |
+| 0x15       | 16           | Attack-move units.(警戒移动)                                 |
+| 0x16       | 16           | Force-move units.(强制移动？)                                |
+| 0x1A       | std: 2       | Stop command.(停止指令)                                      |
 | 0x1B       | std: 2       |                                                              |
 | 0x21       | 20           | A heartbeat that every player generates at 45`n` + 1 frames (every 3 seconds). |
-| 0x28       | std: 2       | Start repair building.                                       |
-| 0x29       | std: 2       | Stop repair building.                                        |
+| 0x28       | std: 2       | Start repair building.(开始维修建筑)                         |
+| 0x29       | std: 2       | Stop repair building.(停止维修建筑)                          |
 | 0x2A       | std: 2       | ‘Q’-select.                                                  |
-| 0x2C       | 29           | Formation-move preview.                                      |
+| 0x2C       | 29           | Formation-move preview.(预览队形？)                          |
 | 0x2E       | std: 2       | Stance change.                                               |
 | 0x2F       | std: 2       | Possibly related to waypoint/planning?                       |
 | 0x32       | 53           | Harder Security Point usage like Surveillance Sweep.         |

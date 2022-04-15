@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(${PROJECT_SOURCE_DIR}\\include)
 
 add_executable(RAT_Replay_Parser
-        main.cpp RA3Replay.cpp RA3Replay.h)
+        main.cpp src/replay.cpp src/replay.h)
