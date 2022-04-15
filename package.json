@@ -1,0 +1,24 @@
+{
+  "name": "ra3replayparser",
+  "version": "1.0.0",
+  "description": "用于解析红色警戒三(Command & Conquer: Red Alert 3)的回放文件 `.RA3Replay`",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NeWive/RA3ReplayParser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NeWive/RA3ReplayParser/issues"
+  },
+  "homepage": "https://github.com/NeWive/RA3ReplayParser#readme",
+  "devDependencies": {
+    "nan": "^2.15.0",
+    "node-gyp": "^9.0.0"
+  }
+}

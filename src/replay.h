@@ -15,6 +15,7 @@
 #include<ostream>
 #include<jsoncons/json.hpp>
 #include<sstream>
+#include <node.h>
 
 namespace ReplayParser {
 

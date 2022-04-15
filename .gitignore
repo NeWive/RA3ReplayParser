@@ -4,3 +4,5 @@ cmake-build-debug/**/*
 .cmake/
 CMakeFiles/
 cmake-build-debug/
+node_modules/
+include/
