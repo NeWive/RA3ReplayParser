@@ -2,9 +2,92 @@
 
 用于解析红色警戒三(Command & Conquer: Red Alert 3)的回放文件 `.RA3Replay`
 
-以JSON字符串形式输出，计划后续编译为Nodejs原生模块以备后续使用。
+## Installation
 
-现在是屎山demo，后续会优化
+### NPM
+
+```shell
+npm install replay-parser
+```
+
+### 手动编译
+
+已测试基于Ubuntu20.04使用 Node-Gyp 进行编译
+```shell
+npm install -g node-gyp
+node-gyp configure
+node-gyp build
+```
+输出位置: `build/Release/replayParser.node`
+
+## Usage
+
+```js
+const parser = require("replay-parser");
+// parseReplay为一个同步方法
+const data = parser.parseReplay("absolute-path-to-replay");
+```
+
+返回值参考以下API Doc
+
+## API Doc
+
+### C++模块：namespace: `ReplayParser`
+- 方法: `parseReplayFile`
+
+    - 接受参数
+
+        - fileName: char[]，回放文件的绝对路径
+
+    - 返回值：
+
+        - jsonData: string, 一段JSON字符串
+
+    - 返回值格式
+
+        - status: `boolean`, 表示是否解析成功
+        - message: `string`, 若 `status` 为false，则表示错误信息
+
+        以下属性在 `status` 为 `true`时出现
+
+        -   gameVersion: `string`
+        -   mapCRC: `string`, 以键值对字符串形式出现，格式为 `MC=CRC校验码`，CRC校验码以16进制形式表示
+        -   mapID: `string`
+        -   mapName: `string`
+        -   mapRealName: `string`, 建议后续截取最后一段
+        -   matchConf: `string`, 以键值对字符串的形式出现，键为 `RU`，具体格式表示的信息可查看下文
+        -   matchDescription: `string`
+        -   matchSeed: `string`, 以键值对形式出现，对战的初始随机数种子（猜测）
+        -   modInfo: `Array<string>`
+        -   playerDetailedInfo: `Array<PlayerInfo>`, `PlayerInfo`格式见下文
+        -   playerNumber: `int`
+        -   replayTitle: `string`
+        -   timestamp: `uint32_t`, 保存录像时的时间戳，使用时需乘以1000
+
+    - `PlayerDetailedInfo`
+
+        - faction: `int`, 阵营
+
+            ```c++
+            std::string getFaction(unsigned int f) {
+                switch(f)
+                {
+                    case 1:  return "天眼帝国";
+                    case 3:  return "Commentator";
+                    case 4:  return "盟军";
+                    case 8:  return "苏联";
+                    case 2:  return "帝国";
+                    case 7:  return "随机";
+                    case 9:  return "神州";
+                    default: return "未知";
+                }
+            }
+            ```
+
+        - isPlayer: boolean, 是否为玩家
+
+        - otherData: 见下文中的 `S=`字段，从第三个开始
+
 
 ## RA3 Replay文件格式
 
