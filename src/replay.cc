@@ -143,7 +143,7 @@ namespace ReplayParser {
         std::vector<std::vector<std::string>> playerNames2;
         std::vector<int> playerTeamIds2;
         unsigned int headerLength;
-        std::string mapRealName,mapCRC, matchSeed, postCommentator, matchConf, playerInfoQuery;
+        std::string mapRealName, mapCRC, matchSeed, postCommentator, matchConf, playerInfoQuery;
         uint32_t firstChunkLoc;
         // 无用的字节
         uint32_t meaningless;
@@ -265,6 +265,8 @@ namespace ReplayParser {
                         std::cerr << "Invalid player info" << std::endl;
                     playerNames2.push_back(sub2Tokens);
                     uint32_t v = std::strtoul(sub2Tokens[1].c_str(), NULL, 16);
+                    std::string ipAdd = std::to_string(v>>24) + "." + std::to_string(((v<<8)>>24)) + "." + std::to_string(((v<<16)>>24)) + "." + std::to_string(((v<<24)>>24)) + ":" + sub2Tokens[2];
+                    playerInfoTemp.insert_or_assign("ip", ipAdd);
                     if (subToken.size() > 2 && subToken[0] == 'C' && subToken[2] == ',') {
                         playerInfoTemp.insert_or_assign("isPlayer", false);
                         playerInfoTemp.insert_or_assign("opponent", sub2Tokens[0]);
@@ -306,6 +308,7 @@ namespace ReplayParser {
         // replay名
         replayFile.read(reinterpret_cast<char *>(&strFileNameLen), 4);
         strFileName = read2ByteStringN(replayFile, header->separator[0], strFileNameLen);
+        out.insert_or_assign("replayName", strFileName);
         // replay 时间
         replayFile.read(reinterpret_cast<char *>(&dateTime), sizeof(dateTime));
         // 版本号
@@ -338,7 +341,6 @@ namespace ReplayParser {
             return ;
         }
         String::Utf8Value fName(isolate, args[0]);
-        std::cout << *fName << std::endl;
         if (checkFileExists(*fName)) {
             std::string out = parseReplayFile(*fName);
             args.GetReturnValue().Set(String::NewFromUtf8(isolate, out.c_str()).ToLocalChecked());

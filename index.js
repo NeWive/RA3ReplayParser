@@ -1,4 +1,5 @@
 const parser = require("./build/Release/replayParser");
+const dataWrapper = require("./module/wrapper");
 
 module.exports = {
     /**
@@ -7,6 +8,6 @@ module.exports = {
      * @returns {any}
      */
     parseReplay: (absPath) => {
-        return JSON.parse(parser.replayParser(absPath))
+        return dataWrapper(parser.replayParser(absPath));
     }
 }
